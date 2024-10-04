@@ -57,12 +57,13 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    COLORS_FILE=/etc/bash_pgr_colors.sh
-    if [ -f ${COLORS_FILE} ]; then
-        . ${COLORS_FILE}
-    else
-        PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    fi 
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    for COLORS_FILE in ~/.bash_pgr_colors.sh /etc/bash_pgr_colors.sh; do
+        if [ -f ${COLORS_FILE} ]; then
+            . ${COLORS_FILE}
+            break
+        fi
+    done
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -111,10 +112,12 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-ALIAS_FILE=/etc/bash_pgr_aliases.sh
-if [ -f ${ALIAS_FILE} ]; then
-    . ${ALIAS_FILE}
-fi
+for ALIAS_FILE in ~/.bash_pgr_aliases.sh /etc/bash_pgr_aliases.sh; do
+    if [ -f ${ALIAS_FILE} ]; then
+        . ${ALIAS_FILE}
+        break
+    fi
+done
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
