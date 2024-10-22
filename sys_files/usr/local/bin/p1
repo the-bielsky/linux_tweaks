@@ -5,12 +5,20 @@
 #      Version 2024-04-29
 
 # Addres list can be passed as arguments or as an array
+
+function get_default_gateway(){
+    local gw
+    gw=$(ip route | grep default | awk '{print $3}')
+    echo "${gw}"
+}
+
 if [ -z "${P1_HOSTS}" ]; then
     P1_HOSTS=(
+        $(get_default_gateway)
+        8.8.8.8
         www.wp.pl
         www.google.com
-        8.8.8.8
-        10.0.0.1
+        www.solutionsca.pl
     )
 fi
 
@@ -55,7 +63,7 @@ else
     for ip in "$@"; do
             ping -c 1 -w 1 ${ip} >/dev/null 2>/dev/null
             res=$?
-            printf "ping %-14s " "${ip}"
+            printf "ping %-20s " "${ip}"
             # shellcheck disable=2154
             [ ${res} -eq 0 ] &&  echo -e "[${fg_green}OK${fg_off}]" || echo -e "[${fg_red}FAILED${fg_off}]"
         if [ ${res} -ne 0 ]  && [[ "${TFILE}" =~ tmp\. ]]; then
