@@ -21,11 +21,14 @@ bg_burowy=$(tput setab 236)
 fg_rev=$(tput rev)
 set +a
 
+username_color=${fg_white}
+if [ ${UID} -eq 0 ]; then
+    username_color=${fg_red}
+fi
+
 # Colors for hostname types
 hostname_color=${fg_green}
-if [ ${UID} -eq 0 ]; then
-    hostname_color=${fg_red}
-elif $(command -v vbox-greeter >/dev/null 2>&1); then
+if $(command -v vbox-greeter >/dev/null 2>&1); then
     hostname_color=${fg_amber}
 elif [[ -n "${SSH_CLIENT}" ]]; then
     hostname_color=${fg_cyan}
@@ -39,23 +42,82 @@ function is_vpn_connection(){
     ip link show dev tun0 2>/dev/null | grep -c LOWER_UP
 }
 
+# Function to get the current Git branch name
+function git_branch {
+  git rev-parse --abbrev-ref HEAD 2>/dev/null
+}
+
+# Function to check if the Git status is clean
+function git_status {
+  if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
+    echo -e "${fg_red}"  # Red color
+  else
+    echo -e "$fg_green"  # Green color
+  fi
+}
+
+function git_describe {
+  git describe --tags --always
+}
+
+# Function to check if the current directory is a Git repository
+function is_git_repo {
+  if $(git rev-parse --is-inside-work-tree &>/dev/null); then
+    echo -e "─${fg_red}($(git_status)$(git_branch)${fg_red}/$(git_status)$(git_describe)${fg_red})"
+  else
+    return
+  fi
+}
+
 # shellcheck disable=2154
 # Bez zamknięcia nazw kolorów w \[${nazwa}\] PS1 działa, ale rozwala się przewijanie historii strzałką (dziwne rzeczy, gdy po dłuższym tekscie jest krótszy)
+
+# upper-left corner"
+# ┌─[root@przemekg]─[linux_tweaks]
+# └── # 
+# PS1="${fg_red}┌─[${username_color}\u${fg_red}${hostname_color}@\h${fg_red}]─[${fg_amber}\W${fg_red}]"
+# PS1="${PS1}\n"
+# PS1=${PS1}"${fg_red}└── ${fg_amber}\$${fg_off} "
+
+# PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")"
+# # user data
+# PS1="[$(
+# if [[ ${EUID} == 0 ]];
+#     then echo '\[\033[01;31m\]root'${fg_red}@${username_color}'\h'; 
+#     else echo '\[\033[0;39m\]\u'${fg_amber}@${hostname_color}'\h'; 
+# fi
+
+# )\[\033[0;31m\]]"
+
+# \$( [ -n \"${NETNS}\" ]  &&  echo \"\342\224\200[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )\
+# \$( [ -n \"\${tag}\" ]  &&  echo \"\342\224\200[\[${fg_amber}tag \${tag}\[${fg_red}\]]\"    )\
+# \$( [ -n \"\${build}\" ]  &&  echo \"\342\224\200[\[${fg_amber}build \${build}\[${fg_red}\]]\"    )\
+# \342\224\200[${fg_amber}\W\[\033[0;31m\]]\n\[\033[0;31m\]\342\224\224\342\224\200\
+# \$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)${fg_red}]\")\
+# \$( [ -n \"\${PPJ1_CLIGRP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]voipgrp \${PPJ1_CLIGRP}\[${fg_red}\]]\"    )\
+# \$( [ -n \"\${ipaddr}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]ipaddr \${ipaddr}\[${fg_red}\]]\"    )\
+# \$( [ \"\$(is_vpn_connection)\" -eq 1 ]  &&  echo \"\342\224\200[\[${fg_red}\]VPN]\"    )\
+# \342\224\200 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
+# else
+#     PS1='─[\u@\h]─[\W]\n└── \$ '
+# fi
+
+
+# ─${fg_red}($(git_status)$(git_branch)${fg_red}/$(git_status)$(git_describe)${fg_red})\
 PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")\
 [$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root'${fg_red}@${hostname_color}'\h'; else echo '\[\033[0;39m\]\u'${fg_amber}@${hostname_color}'\h'; fi)\
 \[\033[0;31m\]]\
 \$( [ -n \"${NETNS}\" ]  &&  echo \"\342\224\200[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )\
 \$( [ -n \"\${tag}\" ]  &&  echo \"\342\224\200[\[${fg_amber}tag \${tag}\[${fg_red}\]]\"    )\
 \$( [ -n \"\${build}\" ]  &&  echo \"\342\224\200[\[${fg_amber}build \${build}\[${fg_red}\]]\"    )\
-\342\224\200[${fg_amber}\W\[\033[0;31m\]]\n\[\033[0;31m\]\342\224\224\342\224\200\
-\$( [ -n \"\${PGRENV_DATESTAMP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)${fg_red}]\")\
+\342\224\200[${fg_amber}\w\[\033[0;31m\]]\n\[\033[0;31m\]\342\224\224\342\224\200\
+\$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)${fg_red}]\")\
 \$( [ -n \"\${PPJ1_CLIGRP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]voipgrp \${PPJ1_CLIGRP}\[${fg_red}\]]\"    )\
 \$( [ -n \"\${ipaddr}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]ipaddr \${ipaddr}\[${fg_red}\]]\"    )\
 \$( [ \"\$(is_vpn_connection)\" -eq 1 ]  &&  echo \"\342\224\200[\[${fg_red}\]VPN]\"    )\
 \342\224\200 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
 # else
-#     PS1='─[\u@\h]─[\W]\n└── \$ '
-# fi
+
 
 # Set 'man' colors
 man() {
