@@ -81,20 +81,20 @@ function git_status {
 # --- PGR_EXTENSIONS_& ---
 # /home/przemekg/.cache/pypoetry/virtualenvs/imm-GRU6xaL7-py3.12/bin/activate    
 # $VIRTUAL_ENV_PROMPT
-PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]${fg_red}]\342\224\200\")\
-\$( [ -n \"${VIRTUAL_ENV_PROMPT}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]poetry: \${VIRTUAL_ENV_PROMPT}\[${fg_red}\]]\"    )\
-[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root'${fg_red}@${hostname_color}'\h'; else echo '\[\033[0;39m\]\u'${fg_amber}@${hostname_color}'\h'; fi)\
-\[\033[0;31m\]]\
-\$( [ -n \"${NETNS}\" ]  &&  echo \"\342\224\200[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )\
-\$( [ -n \"\${tag}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]tag \${tag}\[${fg_red}\]]\"    )\
-\$( [ -n \"\${build}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]build \${build}\[${fg_red}\]]\"    )\
-\342\224\200[${fg_amber}\w\[\033[0;31m\]]\n\[\033[0;31m\]\342\224\224\
-\$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)\[${fg_red}\]]\")\
-\$( [ -n \"\${PPJ1_CLIGRP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]voipgrp \${PPJ1_CLIGRP}\[${fg_red}\]]\"    )\
-\$( [ -n \"\${ipaddr}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]ipaddr \${ipaddr}\[${fg_red}\]]\"    )\
-\$( [ -n \"\$(git_branch)\" ]  &&  echo \"\342\224\200[\[\$(git_status)\]\$(git_branch)\[${fg_red}\]]\")\
-\$( [ \"\$(is_vpn_connection)\" -eq 1 ]  &&  echo \"\342\224\200[\[${fg_red}\]VPN]\"    )\
-\342\224\200 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
+PS1="\[${fg_red}\]┌\$([[ \$? != 0 ]] && echo \"─[\342\234\227\[\033[0;37m\]${fg_red}]\")\
+\$( [ -n \"\${VIRTUAL_ENV_PROMPT}\" ]  &&  echo \"─[\[${fg_amber}\]poetry: \${VIRTUAL_ENV_PROMPT}\[${fg_red}\]]\")\
+─[$(if [[ ${EUID} == 0 ]]; then echo ${fg_red}root@${hostname_color}'\h'; else echo '\[\033[0;39m\]\u'${fg_amber}@${hostname_color}'\h'; fi)\
+\[${fg_red}\]]\
+\$( [ -n \"${NETNS}\" ]  &&  echo \"─[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )\
+\$( [ -n \"\${tag}\" ]  &&  echo \"─[\[${fg_amber}\]tag \${tag}\[${fg_red}\]]\"    )\
+\$( [ -n \"\${build}\" ]  &&  echo \"─[\[${fg_amber}\]build \${build}\[${fg_red}\]]\"    )\
+─[${fg_amber}\w\[${fg_red}\]]\n\[${fg_red}\]└\
+\$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"─[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)\[${fg_red}\]]\")\
+\$( [ -n \"\${PPJ1_CLIGRP}\" ]  &&  echo \"─[\[${fg_amber}\]voipgrp \${PPJ1_CLIGRP}\[${fg_red}\]]\"    )\
+\$( [ -n \"\${ipaddr}\" ]  &&  echo \"─[\[${fg_amber}\]ipaddr \${ipaddr}\[${fg_red}\]]\"    )\
+\$( [ -n \"\$(git_branch)\" ]  &&  echo \"─[\[\$(git_status)\]\$(git_branch)\[${fg_red}\]]\")\
+\$( [ \"\$(is_vpn_connection)\" -eq 1 ]  &&  echo \"─[\[${fg_red}\]VPN]\"    )\
+─ \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
 
 # Set 'man' colors
 man() {
