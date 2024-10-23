@@ -78,7 +78,11 @@ function git_status {
 # shellcheck disable=2154
 # Bez zamknięcia nazw kolorów w \[${nazwa}\] PS1 działa, ale rozwala się przewijanie historii strzałką (dziwne rzeczy, gdy po dłuższym tekscie jest krótszy)
 # \$(git_status) runs every usage; $(git_status) runs once 
+# --- PGR_EXTENSIONS_& ---
+# /home/przemekg/.cache/pypoetry/virtualenvs/imm-GRU6xaL7-py3.12/bin/activate    
+# $VIRTUAL_ENV_PROMPT
 PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]${fg_red}]\342\224\200\")\
+\$( [ -n \"${VIRTUAL_ENV_PROMPT}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]poetry: \${VIRTUAL_ENV_PROMPT}\[${fg_red}\]]\"    )\
 [$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root'${fg_red}@${hostname_color}'\h'; else echo '\[\033[0;39m\]\u'${fg_amber}@${hostname_color}'\h'; fi)\
 \[\033[0;31m\]]\
 \$( [ -n \"${NETNS}\" ]  &&  echo \"\342\224\200[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )\
