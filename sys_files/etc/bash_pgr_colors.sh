@@ -92,7 +92,7 @@ PS1="\[${fg_red}\]┌\$([[ \$? != 0 ]] && echo \"─[\342\234\227\[\033[0;37m\]$
 \$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"─[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)\[${fg_red}\]]\")\
 \$( [ -n \"\${PPJ1_CLIGRP}\" ]  &&  echo \"─[\[${fg_amber}\]voipgrp \${PPJ1_CLIGRP}\[${fg_red}\]]\"    )\
 \$( [ -n \"\${ipaddr}\" ]  &&  echo \"─[\[${fg_amber}\]ipaddr \${ipaddr}\[${fg_red}\]]\"    )\
-\$( [ -n \"\$(git_branch)\" ]  &&  echo \"─[\[\$(git_status)\]\$(git_branch)\[${fg_red}\]]\")\
+\$( [ -n \"\$(git_branch)\" ]  &&  echo \"─[git: \[\$(git_status)\]\$(git_branch)\[${fg_red}\]]\")\
 \$( [ \"\$(is_vpn_connection)\" -eq 1 ]  &&  echo \"─[\[${fg_red}\]VPN]\"    )\
 ─ \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
 
