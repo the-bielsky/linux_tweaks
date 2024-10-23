@@ -44,51 +44,51 @@ function is_vpn_connection(){
 
 # Function to get the current Git branch name
 function git_branch {
-  git rev-parse --abbrev-ref HEAD 2>/dev/null
+  res=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  printf "${res}"
 }
 
 # Function to check if the Git status is clean
 function git_status {
   if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
-    echo -e "${fg_red}"  # Red color
+    printf "${fg_red}"  # Red color
   else
-    echo -e "${fg_amber}"  # Green color
+    printf "${fg_amber}"  # Green color
   fi
 }
 
-function git_describe {
-  git describe --tags --always
-}
+# function git_describe {
+#   git describe --tags --always
+# }
 
-# Function to check if the current directory is a Git repository
-function is_git_repo {
-  if $(git rev-parse --is-inside-work-tree &>/dev/null); then
-    echo -e "─${fg_red}($(git_status)$(git_branch)${fg_red}/$(git_status)$(git_describe)${fg_red})"
-  else
-    return
-  fi
-}
+# # Function to check if the current directory is a Git repository
+# function is_git_repo {
+#   if $(git rev-parse --is-inside-work-tree &>/dev/null); then
+#     echo -e "─${fg_red}($(git_status)$(git_branch)${fg_red}/$(git_status)$(git_describe)${fg_red})"
+#   else
+#     return
+#   fi
+# }
 
-# shellcheck disable=2154
-# Bez zamknięcia nazw kolorów w \[${nazwa}\] PS1 działa, ale rozwala się przewijanie historii strzałką (dziwne rzeczy, gdy po dłuższym tekscie jest krótszy)
 
 # upper-left corner"
 # ┌─[root@przemekg]─[linux_tweaks]
 # └── # 
 
+# shellcheck disable=2154
+# Bez zamknięcia nazw kolorów w \[${nazwa}\] PS1 działa, ale rozwala się przewijanie historii strzałką (dziwne rzeczy, gdy po dłuższym tekscie jest krótszy)
 # \$(git_status) runs every usage; $(git_status) runs once 
-# \$( [ -n \"\$(git_branch)\" ]  &&  echo \"\342\224\200[\[\$(git_status)\]git: \$(git_branch)\]\[${fg_red}]\"    )\
 PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]${fg_red}]\342\224\200\")\
 [$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root'${fg_red}@${hostname_color}'\h'; else echo '\[\033[0;39m\]\u'${fg_amber}@${hostname_color}'\h'; fi)\
 \[\033[0;31m\]]\
 \$( [ -n \"${NETNS}\" ]  &&  echo \"\342\224\200[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )\
-\$( [ -n \"\${tag}\" ]  &&  echo \"\342\224\200[\[${fg_amber}tag \${tag}\[${fg_red}\]]\"    )\
-\$( [ -n \"\${build}\" ]  &&  echo \"\342\224\200[\[${fg_amber}build \${build}\[${fg_red}\]]\"    )\
+\$( [ -n \"\${tag}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]tag \${tag}\[${fg_red}\]]\"    )\
+\$( [ -n \"\${build}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]build \${build}\[${fg_red}\]]\"    )\
 \342\224\200[${fg_amber}\w\[\033[0;31m\]]\n\[\033[0;31m\]\342\224\224\
-\$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)${fg_red}]\")\
+\$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)\[${fg_red}\]]\")\
 \$( [ -n \"\${PPJ1_CLIGRP}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]voipgrp \${PPJ1_CLIGRP}\[${fg_red}\]]\"    )\
 \$( [ -n \"\${ipaddr}\" ]  &&  echo \"\342\224\200[\[${fg_amber}\]ipaddr \${ipaddr}\[${fg_red}\]]\"    )\
-\$( [ -n \"\$(git_branch)\" ]  &&  echo \"\342\224\200[\[\$(git_status)\]git: \$(git_branch)\]\[${fg_red}\]]\"    )\
+\$( [ -n \"\$(git_branch)\" ]  &&  echo \"\342\224\200[\[\$(git_status)\]\$(git_branch)\[${fg_red}\]]\")\
 \$( [ \"\$(is_vpn_connection)\" -eq 1 ]  &&  echo \"\342\224\200[\[${fg_red}\]VPN]\"    )\
 \342\224\200 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
 
