@@ -3,21 +3,17 @@ PGR_EXTENSIONS_FILE="resources/pgr_extensions_to_bashrc.sh"
 rsync -r sys_files/etc/* /etc/
 rsync -r sys_files/usr/* /usr/
 
-for user in `ls -1 /home/`, root; do
-    prefix="home"
-    if [ "$user" == "root" ]; then
+for user in `ls -1 /home/` root; do
+    prefix="/home"
+    if [[ "$user" == "root" ]]; then
         prefix=""
     fi
-    echo -e "Updating /${prefix}/$user"
+    echo -e "Updating ${prefix}/$user"
     su -c "rsync -ar sys_files/etc/skel/ /${prefix}/$user/" $user
 done
 
-user=root
-echo -e "Updating /$user"
-rsync -ar sys_files/etc/skel/ /$user/
-
 for user in `ls -1 /home/` /root; do
-    prefix="home"
+    prefix="/home"
     if [ "$user" == "root" ]; then
         prefix=""
     fi
