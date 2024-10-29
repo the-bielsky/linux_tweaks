@@ -3,13 +3,25 @@ PGR_EXTENSIONS_FILE="resources/pgr_extensions_to_bashrc.sh"
 rsync -r sys_files/etc/* /etc/
 rsync -r sys_files/usr/* /usr/
 
-for user in `ls -1 /home/` /root/; do
-    echo -e "Updating /home/$user"
-    su -c "rsync -ar sys_files/etc/skel/ /home/$user/" $user
+for user in `ls -1 /home/`, root; do
+    prefix="home"
+    if [ "$user" == "root" ]; then
+        prefix=""
+    fi
+    echo -e "Updating /${prefix}/$user"
+    su -c "rsync -ar sys_files/etc/skel/ /${prefix}/$user/" $user
 done
 
-for user in `ls -1 /home/`; do
-    BASHRC="/home/$user/.bashrc"
+user=root
+echo -e "Updating /$user"
+rsync -ar sys_files/etc/skel/ /$user/
+
+for user in `ls -1 /home/` /root; do
+    prefix="home"
+    if [ "$user" == "root" ]; then
+        prefix=""
+    fi
+    BASHRC="/${prefix}/$user/.bashrc"
     if [ -f "$BASHRC" ]; then
         # Remove lines between PGR_EXTENSIONS and PGR_EXTENSIONS_&
         sed -i '/--- PGR_EXTENSIONS ---/,/--- PGR_EXTENSIONS_& ---/d' "$BASHRC"
