@@ -3,7 +3,8 @@ PGR_EXTENSIONS_FILE="resources/pgr_extensions_to_bashrc.sh"
 rsync -r sys_files/etc/* /etc/
 rsync -r sys_files/usr/* /usr/
 
-for user in `ls -1 /home/`; do
+for user in `ls -1 /home/` /root/; do
+    echo -e "Updating /home/$user"
     su -c "rsync -ar sys_files/etc/skel/ /home/$user/" $user
 done
 
