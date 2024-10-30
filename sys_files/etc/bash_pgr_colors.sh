@@ -14,6 +14,7 @@ fg_gray=$(tput setaf 8)
 fg_brown=$(tput setaf 94)
 fg_orange=$(tput setaf 208)
 fg_amber=$(tput setaf 136)
+fg_navy=$(tput setaf 18)
 #fg_amber=$(tput setaf 214)
 bg_blue=$(tput setab 4)
 bg_red=$(tput setab 1)
@@ -26,13 +27,27 @@ if [ ${UID} -eq 0 ]; then
     username_color=${fg_red}
 fi
 
+# USER AND HOSTNAME PRESENTATION
 # Colors for hostname types
-hostname_color=${fg_green}
-if $(command -v vbox-greeter >/dev/null 2>&1); then
-    hostname_color=${fg_amber}
-elif [[ -n "${SSH_CLIENT}" ]]; then
-    hostname_color=${fg_cyan}
-fi
+function ps1_user_and_hostname(){
+    hostname_color=${fg_green}
+    username_color=${fg_white}
+    if [[ ${EUID} == 0 ]]; then 
+        # echo -e "\[${fg_red}\]root@"
+        hostname_color=${fg_red}
+        username_color=${fg_red}
+    fi
+    if $(command -v vbox-greeter >/dev/null 2>&1); then
+        hostname_color=${fg_amber}
+    elif [[ "$(hostname)" =~ ^imm- ]]; then
+        hostname_color=${fg_orange}
+    elif [[ -n "${SSH_CLIENT}" ]]; then
+        hostname_color=${fg_cyan}
+    fi
+
+    echo -e "${username_color}\\u${fg_amber}@${hostname_color}\\h"
+}
+
 buf=fg_${NETNS//-/_}
 ns_colour=${!buf}
 ns_colour="${ns_colour:-${fg_amber}}"
@@ -83,8 +98,7 @@ function git_status {
 # $VIRTUAL_ENV_PROMPT
 PS1="\[${fg_red}\]┌\$([[ \$? != 0 ]] && echo \"─[\342\234\227\[\033[0;37m\]${fg_red}]\")\
 \$( [ -n \"\${VIRTUAL_ENV_PROMPT}\" ]  &&  echo \"─[\[${fg_amber}\]poetry: \${VIRTUAL_ENV_PROMPT}\[${fg_red}\]]\")\
-─[$(if [[ ${EUID} == 0 ]]; then echo ${fg_red}root@${hostname_color}'\h'; else echo '\[\033[0;39m\]\u'${fg_amber}@${hostname_color}'\h'; fi)\
-\[${fg_red}\]]\
+─[$(ps1_user_and_hostname)\[${fg_red}\]]\
 \$( [ -n \"${NETNS}\" ]  &&  echo \"─[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )\
 \$( [ -n \"\${tag}\" ]  &&  echo \"─[\[${fg_amber}\]tag \${tag}\[${fg_red}\]]\"    )\
 \$( [ -n \"\${build}\" ]  &&  echo \"─[\[${fg_amber}\]build \${build}\[${fg_red}\]]\"    )\
