@@ -41,6 +41,8 @@ function ps1_user_and_hostname(){
         hostname_color=${fg_amber}
     elif [[ "$(hostname)" =~ ^imm- ]]; then
         hostname_color=${fg_orange}
+    elif [[ "$(hostname)" =~ ^immdev- ]]; then
+        hostname_color=${fg_gray}
     elif [[ -n "${SSH_CLIENT}" ]]; then
         hostname_color=${fg_cyan}
     fi
@@ -94,8 +96,7 @@ function git_status {
 # Bez zamknięcia nazw kolorów w \[${nazwa}\] PS1 działa, ale rozwala się przewijanie historii strzałką (dziwne rzeczy, gdy po dłuższym tekscie jest krótszy)
 # \$(git_status) runs every usage; $(git_status) runs once 
 # --- PGR_EXTENSIONS_& ---
-# /home/przemekg/.cache/pypoetry/virtualenvs/imm-GRU6xaL7-py3.12/bin/activate    
-# $VIRTUAL_ENV_PROMPT
+
 PS1="\[${fg_red}\]┌\$([[ \$? != 0 ]] && echo \"─[\342\234\227\[\033[0;37m\]${fg_red}]\")\
 \$( [ -n \"\${VIRTUAL_ENV_PROMPT}\" ]  &&  echo \"─[\[${fg_amber}\]poetry: \${VIRTUAL_ENV_PROMPT}\[${fg_red}\]]\")\
 ─[$(ps1_user_and_hostname)\[${fg_red}\]]\
