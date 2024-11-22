@@ -18,7 +18,11 @@ for ALIAS_FILE in ~/.bash_pgr_aliases.sh /etc/bash_pgr_aliases.sh; do
         break
     fi
 done
-for filename in docker_helpers.sh script_helpers.sh script_interface.sh file_helpers.sh; do
-    source /usr/local/lib/pgr_shell/${filename}
+# for filename in docker_helpers.sh script_helpers.sh script_interface.sh file_helpers.sh metabase_api_helpers.sh; do
+for filename in /usr/local/lib/pgr_shell/*.sh; do
+    if [[ "$filename" =~ _\.sh$ ]]; then
+        continue
+    fi
+    source ${filename}
 done
 # --- PGR_EXTENSIONS_& ---
