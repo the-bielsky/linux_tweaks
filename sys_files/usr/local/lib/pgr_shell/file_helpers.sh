@@ -6,7 +6,7 @@ if [ ! -f $PGR_BACKUP_DIR ]; then
 fi
 
 function pgr_create_base_backup_filename(){
-    local filename="$1.$(date +%Y%m%d%H%M)"
+    local filename="$1.$(date +%Y%m%d_%H%M)"
     if [ -n ${PGR_BACKUP_DIR} ]; then
         if [ -d ${PGR_BACKUP_DIR} ]; then
             local OUT_FILE="${PGR_BACKUP_DIR}/$filename"
@@ -25,10 +25,9 @@ function pgr_find_empty_filename()
 {
     local filename="$1"
     local cnt=0
-    OUT_FILE=$(pgr_create_base_backup_filename)
-    out_file="${OUT_FILE}"
+    out_file="${filename}"
     while [ -f "$out_file" ]; do
-        out_file="${OUT_FILE}.${cnt}"
+        out_file="${filename}.${cnt}"
         cnt=$((cnt+1))
     done
     echo $out_file
@@ -39,13 +38,14 @@ function pgr_backup_file {
         echo "File $1 not found" >&2
         return 1
     fi
+    input_file="$1"
+    OUT_FILE=$(pgr_create_base_backup_filename "${input_file}")
+    out_file=$(pgr_find_empty_filename "${OUT_FILE}")
     cnt=0
-    
-    out_file=$(pgr_find_empty_filename "$OUT_FILE")
     trap "echo 'Backup failed' >&2; return 1" ERR
-    cp "$1" "${out_file}"
+    cp "${input_file}" "${out_file}"
     trap - ERR
-    echo "Backup of $1 saved to $out_file" >&2
+    echo "Backup of ${input_file} saved to $out_file" >&2
     return 0
 }
 
