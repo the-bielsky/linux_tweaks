@@ -1,10 +1,10 @@
 #!/bin/bash
 
-function new_api_session() {
+function get_session_id() {
   # usage: new_api_session <username> <password> <url>
-  local USR=$1
-  local PWD=$2
-  local URL=$3
+  local URL=$1
+  local USR=$2
+  local PWD=$3
   local apicmd=$(curl -X POST \
     -H "Content-Type: application/json" \
     -d '{"username": "'${USR}'", "password": "'${PWD}'"}' \
