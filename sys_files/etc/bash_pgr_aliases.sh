@@ -25,7 +25,7 @@ function _git_pullpush_(){
     echo GIT: $operation $BRANCH; 
     BRANCH=$(git branch --show-current); 
     if git_status; then
-        sleep 1.5; 
+        sleep 1; 
         trap "echo operation failed; return 1" ERR
         git $operation origin ${BRANCH}
         return 0
