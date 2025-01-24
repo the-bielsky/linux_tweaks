@@ -1,3 +1,4 @@
+
 # --- PGR_EXTENSIONS ---
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;

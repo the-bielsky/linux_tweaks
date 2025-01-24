@@ -4,13 +4,13 @@ function get_session_id() {
   # usage: new_api_session <username> <password> <url>
   local URL=$1
   local USR=$2
-  local PWD=$3
+  local PASSWD=$3
   local apicmd=$(curl -X POST \
     -H "Content-Type: application/json" \
-    -d '{"username": "'${USR}'", "password": "'${PWD}'"}' \
+    -d '{"username": "'${USR}'", "password": "'${PASSWD}'"}' \
     "${URL}/api/session" 
   )
-  session_id=$(echo $apicmd | jq -r '.id')
+  local session_id=$(echo $apicmd | jq -r '.id')
   echo $session_id
 }
 
@@ -33,12 +33,11 @@ function post_endpoint() {
   local URL=$1
   local session_id=$2
   local endpoint=$3
-  local data=$4
-  local apicmd=$(curl -X POST \
+  local data="$4"
+
+  curl -X POST \
     -H "Content-Type: application/json" \
     -H "X-Metabase-Session: ${session_id}" \
     -d "${data}" \
     "${URL}/api/${endpoint}"
-  )
-  echo $apicmd
 }

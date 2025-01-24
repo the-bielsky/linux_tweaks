@@ -19,3 +19,24 @@ alias please='sudo'
 # alias Reboot='systemctl reboot'
 alias stamp='if [ -n "${PGR_DATESTAMP}" ]; then unset PGR_DATESTAMP; else export PGR_DATESTAMP=1; fi'
 alias shcon='source /usr/local/bin/sshconnect.sh'
+
+function _git_pullpush_(){
+    operation=$1
+    echo GIT: $operation $BRANCH; 
+    BRANCH=$(git branch --show-current); 
+    if git_status; then
+        sleep 1.5; 
+        trap "echo operation failed; return 1" ERR
+        git $operation origin ${BRANCH}
+        return 1
+    else
+        echo Branch $BRANCH is not commited\; operation aborted
+        return 1
+    fi
+}
+
+# alias gill='git_status && {echo GIT: pulling $(git branch --show-current); sleep 1.5; git pull origin $(git branch --show-current)'
+alias gish='_git_pullpush_ push'
+alias gill='_git_pullpush_ pull'
+
+# alias gish='sleep 1.5; git push origin $(git branch --show-current)'
