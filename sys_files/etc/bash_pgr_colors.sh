@@ -74,13 +74,13 @@ function git_status {
   fi
 }
 
-# function git_status {
-#   if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
-#     return 1
-#   else
-#     return 0
-#   fi
-# }
+function git_status_numeric {
+  if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
+    return 1
+  else
+    return 0
+  fi
+}
 
 # function git_describe {
 #   git describe --tags --always
