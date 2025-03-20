@@ -32,11 +32,11 @@ function dkr_check_tag_exists() {
 }
 
 function dkr_install_docker_ce() {
-    read -p "Do you want to install Docker CE? [y/n]: " -n 1 -r
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        shout Action cancelled.
-        return 1
-    fi
+    # read -p "Do you want to install Docker CE? [y/n]: " -n 1 -r
+    # if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    #     shout Action cancelled.
+    #     return 1
+    # fi
     trap "shout 'Failed to install Docker.'; return 1' ERR"
     for package in docker docker-engine docker.io containerd runc; do
         apt -y remove $package
