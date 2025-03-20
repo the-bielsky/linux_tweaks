@@ -11,7 +11,7 @@ alias disks="sudo fdisk -l 2>/dev/null | grep GiB | sed 's|^.*/d|/d|g; s|:||g; s
 # alias fucking='sudo'
 alias hosts='cat /etc/hosts'
 alias his='history | sed -r "s|^[[:blank:]]*[[:digit:]]*[[:blank:]]+||"'
-alias l='ls -CF'
+alias l='ls -CF' 
 alias la='ls -lha'
 alias ll='ls -lh'
 alias please='sudo'
@@ -37,3 +37,5 @@ function _git_pullpush_(){
 
 alias gish='_git_pullpush_ push'
 alias gill='_git_pullpush_ pull'
+
+alias vin='code-insiders`
