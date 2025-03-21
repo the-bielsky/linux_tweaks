@@ -5,11 +5,11 @@ rsync -r sys_files/usr/* /usr/
 
 for user in `ls -1 /home/` root; do
     prefix="/home"
+    echo -e "Updating ${prefix}/$user"
     if [[ "$user" == "root" ]]; then
         prefix=""
     fi
-    echo -e "Updating ${prefix}/$user"
-    su -c "rsync -ar sys_files/etc/skel/ /${prefix}/$user/" $user
+    su -c "rsync -r sys_files/etc/skel/ /${prefix}/$user/" $user
     BASHRC="/${prefix}/$user/.bashrc"
     if [ -f ${PGR_EXTENSIONS_FILE} ]; then
         :
