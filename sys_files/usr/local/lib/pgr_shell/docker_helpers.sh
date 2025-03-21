@@ -37,19 +37,24 @@ function dkr_install_docker_ce() {
     #     shout Action cancelled.
     #     return 1
     # fi
-    trap "shout 'Failed to install Docker.'; return 1' ERR"
+    trap "shout 'Failed to install Docker.'; return 1" ERR
+    echo "Removing old Docker versions..." >&2
     for package in docker docker-engine docker.io containerd runc; do
-        apt -y remove $package
+        apt -y remove $package 2>/dev/null
     done
-    apt -y install apt-transport-https ca-certificates curl gnupg lsb-release git
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+
+    if [ ! -f /etc/apt/sources.list.d/google-cloud-sdk.list ]; then
+        apt -y install apt-transport-https ca-certificates curl gnupg lsb-release git
+        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    fi
+
 
     apt update
     apt -y install docker-ce docker-ce-cli containerd.io google-cloud-sdk docker-compose
-
     systemctl enable docker.service
     systemctl enable containerd.service
     trap - ERR
