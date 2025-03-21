@@ -32,6 +32,11 @@ function dkr_check_tag_exists() {
 }
 
 function dkr_install_docker_ce() {
+    # must be root
+    if [ $EUID -ne 0 ]; then
+        shout "This script must be run as root."
+        return 1
+    fi
     # read -p "Do you want to install Docker CE? [y/n]: " -n 1 -r
     # if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     #     shout Action cancelled.
@@ -84,3 +89,7 @@ function dkr_move_docker_directory(){
     service docker start
     trap - ERR
 }
+
+if [ "$1" == "install" ]; then
+    dkr_install_docker_ce
+fi
