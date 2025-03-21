@@ -43,7 +43,7 @@ termcapinfo  * '' 'hs:ts=\E_:fs=\E\\:ds=\E_\E\\'
 # defhstatus "screen: ^En (^Et)"
 #PGr
 #defhstatus "screen: ^En (^Et) %S"
-#hardstatus "screen: ^En (^Et) %S asdfasdfdsafdsaf"
+hardstatus "screen: ^En (^Et) %S asdfasdfdsafdsaf"
 #PGr
 defscrollback 10000
 
@@ -155,9 +155,6 @@ bind ^] paste [.]
 # screen -t local 0
 # screen -t mail 1 mutt
 # screen -t 40 2 rlogin server
-
-# hardstatus alwaysignore
-# hardstatus alwayslastline "%Lw"
 
 # bind = resize =
 # bind + resize +1

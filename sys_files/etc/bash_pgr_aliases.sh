@@ -38,4 +38,4 @@ function _git_pullpush_(){
 alias gish='_git_pullpush_ push'
 alias gill='_git_pullpush_ pull'
 
-alias vin='code-insiders`
+alias vin='code-insiders'
