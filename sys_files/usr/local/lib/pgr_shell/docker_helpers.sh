@@ -13,13 +13,13 @@ function dkr_setup_gcloud_repo(){
     mkdir -p /usr/share/keyrings
     
     # Download and store Google Cloud SDK key properly
-    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --yes --dearmor -o /usr/share/keyrings/cloud.google.gpg
 
     # Add repository with proper key reference
     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee /etc/apt/sources.list.d/google-cloud-sdk.list
 
     # Add Docker repository
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --yes --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     apt update
@@ -69,7 +69,6 @@ function dkr_install_docker_ce() {
     for package in docker docker-engine docker.io containerd runc; do
         apt -y remove $package 2>/dev/null
     done
-    dkr_setup_gcloud_repo
     apt -y install docker-ce docker-ce-cli containerd.io google-cloud-sdk docker-compose
     systemctl enable docker.service
     trap - ERR
@@ -112,7 +111,17 @@ function _autocheck_space(){
     fi
 }
 
-if [ "$1" == "install" ]; then
+function dkr_setup_all (){
+    # must be root
+    if [ $EUID -ne 0 ]; then
+        shout "This script must be run as root."
+        return 1
+    fi
     dkr_setup_gcloud_repo
     dkr_install_docker_ce
+    apt -y install google-cloud-sdk
+}
+
+if [ "$1" == "install" ]; then
+    dkr_setup_all
 fi
