@@ -1,5 +1,4 @@
 
-# --- PGR_EXTENSIONS ---
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
@@ -26,4 +25,4 @@ for filename in /usr/local/lib/pgr_shell/*.sh; do
     fi
     source ${filename}
 done
-# --- PGR_EXTENSIONS_& ---
+

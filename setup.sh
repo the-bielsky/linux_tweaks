@@ -11,25 +11,24 @@ for user in `ls -1 /home/` root; do
     fi
     su -c "rsync -r sys_files/etc/skel/ /${prefix}/$user/" $user
     BASHRC="/${prefix}/$user/.bashrc"
-    if [ -f ${PGR_EXTENSIONS_FILE} ]; then
-        :
-    else
-        echo -e "file: ${PGR_EXTENSIONS_FILE} not found"
+    # check if file contains NO_INSTALL_PGR_EXTENSIONS and skip if found
+    if grep -q "NO_INSTALL_PGR_EXTENSIONS" ${BASHRC}; then
+        echo -e "NO_INSTALL_PGR_EXTENSIONS found in ${BASHRC}"
         echo -e "bashrc: ${BASHRC} not updated automatically"
-        echo -e "Please copy the lines between PGR_EXTENSIONS and PGR_EXTENSIONS_& from ${PGR_EXTENSIONS_FILE} to $BASHRC"
         continue
     fi
+    # check if file contains --- PGR_EXTENSIONS --- 
+    if grep -Eq "\-\-\- PGR_EXTENSIONS ---" ${BASHRC}; then
+        :
+    else
+        :
+        echo "# --- PGR_EXTENSIONS ---" >> ${BASHRC}
+        echo "# --- PGR_EXTENSIONS_& ---" >> ${BASHRC}
+    fi
+
     if [ -f "$BASHRC" ]; then
-        echo -e "Updating ${BASHRC}"
-        # Remove lines between PGR_EXTENSIONS and PGR_EXTENSIONS_&
-        sed -i '/--- PGR_EXTENSIONS ---/,/--- PGR_EXTENSIONS_& ---/d' "$BASHRC"
-        # copy lines between PGR_EXTENSIONS and PGR_EXTENSIONS_& from PGR_EXTENSIONS_FILE to .bashrc
-        if [ -f ${PGR_EXTENSIONS_FILE} ]; then
-            sed -n '/--- PGR_EXTENSIONS ---/,/--- PGR_EXTENSIONS_& ---/p' ${PGR_EXTENSIONS_FILE} >> "$BASHRC"
-        else
-            echo "${PGR_EXTENSIONS_FILE} not found" >&2
-            echo "Please copy the lines between PGR_EXTENSIONS and PGR_EXTENSIONS_& from ${PGR_EXTENSIONS_FILE} to $BASHRC" >&2
-        fi
+        sed -i '/--- PGR_EXTENSIONS ---/,/--- PGR_EXTENSIONS_&/{//!d}' ${BASHRC} 
+        sed -i -s '/--- PGR_EXTENSIONS ---/r '${PGR_EXTENSIONS_FILE} ${BASHRC}
     else
         echo "${BASHRC} not found" >&2
     fi
