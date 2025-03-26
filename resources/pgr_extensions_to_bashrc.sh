@@ -26,3 +26,7 @@ for filename in /usr/local/lib/pgr_shell/*.sh; do
     source ${filename}
 done
 
+# # VARIABLES FOR PGR_EXTENSIONS:
+# export PGR_BACKUP_DIR=      # For local backups
+# export PGR_GIT_BACKUP_DIR=  # For git(hub) backups
+# export PGR_REPO_OWNER=      # For github backups; may be set in github_backup.conf of backup directory
