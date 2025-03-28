@@ -32,7 +32,7 @@ function dkr_get_docker_dir() {
 }
 
 function dkr_check_docker_disk_space() {
-    # dkr_check_docker_disk_space [required_space] [docker directory] default: DOCKER_REQUIRED_DISK_SPACE
+    # dkr_check_docker_disk_space [required_space] [docker directory] - check that is enough space in docker data directory; default: DOCKER_REQUIRED_DISK_SPACE
     # $1 - required space in KB (optional) defauilt: DOCKER_REQUIRED_DISK_SPACE
     # $2 - [docker directory] (optional) default: $(dkr_get_docker_dir)
     local required_space=${1:-$DOCKER_REQUIRED_DISK_SPACE}

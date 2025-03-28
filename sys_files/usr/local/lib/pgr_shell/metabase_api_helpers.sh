@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function get_session_id() {
-  # usage: new_api_session <username> <password> <url>
+  # get_session_id <username> <password> <url>
   local URL=$1
   local USR=$2
   local PASSWD=$3
@@ -15,7 +15,7 @@ function get_session_id() {
 }
 
 function get_endpoint() {
-  # usage   : get_endpoint <URL> <session_id> <endpoint>
+  # get_endpoint <URL> <session_id> <endpoint>
   local URL=$1
   local session_id=$2
   local endpoint=$3
@@ -28,7 +28,7 @@ function get_endpoint() {
 }
 
 function post_endpoint() {
-  # usage: post_endpoint <URL> <session_id> <endpoint> <data>
+  # post_endpoint <URL> <session_id> <endpoint> <data> - post data to endpoint
   #        post_endpoint $URL $session_id endpoint_name "$(cat ~/endpoint_backup.json)" | jq
   local URL=$1
   local session_id=$2

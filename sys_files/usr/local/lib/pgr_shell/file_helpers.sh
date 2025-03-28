@@ -6,7 +6,9 @@ if [ ! -f $PGR_BACKUP_DIR ]; then
 fi
 
 function pgr_create_base_backup_filename(){
+    # pgr_create_base_backup_filename <filename> [backup_dir] - create a filename with date and time as suffix; filename is a full path; default backup_dir: PGR_BACKUP_DIR
     local filename="$1.$(date +%Y%m%d_%H%M)"
+    local backup_dir=${2:-$PGR_BACKUP_DIR}
     if [ -n ${PGR_BACKUP_DIR} ]; then
         if [ -d ${PGR_BACKUP_DIR} ]; then
             local OUT_FILE="${PGR_BACKUP_DIR}/$filename"
@@ -20,9 +22,8 @@ function pgr_create_base_backup_filename(){
     echo $OUT_FILE
 }
 
-
-function pgr_find_empty_filename()
-{
+function pgr_find_empty_filename(){
+    # pgr_find_empty_filename [filename] - appends a incremental number to the filename if given file already exists
     local filename="$1"
     local cnt=0
     out_file="${filename}"
@@ -34,6 +35,7 @@ function pgr_find_empty_filename()
 }
 
 function pgr_backup_file {
+    # pgr_backup_file <filename> - backup a file to the backup directory; adds a date and time suffix to the filename; if the file already exists, adds an incremental number to the filename
     if [ ! -f $1 ]; then
         echo "File $1 not found" >&2
         return 1
@@ -50,6 +52,7 @@ function pgr_backup_file {
 }
 
 function pgr_pg_dump {
+    # pgr_pg_dump <compose_container> <db_user> <db_name> - backup a PostgreSQL database to a file; adds a date and time suffix to the filename; if the file already exists, adds an incremental number to the filename
     container=$1
     db_user=$2
     db_name=$3

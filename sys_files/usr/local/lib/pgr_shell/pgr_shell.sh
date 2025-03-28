@@ -7,6 +7,12 @@ if [ "$0" = "$BASH_SOURCE" ]; then
     exit 1
 fi
 THIS_FILENAME="${BASH_SOURCE[0]}"
+VERSION=""
+
+pgr_shell_version() {
+    # pgr_shell_version - print the version of the pgr shell
+    pgr_git_repo_version "${THIS_FILENAME}"
+}
 
 get_same_dir_files(){
     # list all file of the same directory as the script
@@ -19,14 +25,20 @@ get_same_dir_files(){
 pgr_help() {
     echo
     echo "PGr shell commands"
+    echo "Version: $VERSION"
     echo
     # echo "pgr_help:    Show this help"
     # echo "pgr_git_backup:    Backup all repositories of the owner to the backup_dir"
     # echo "pgr_metabase_api:    Metabase API helpers"
     for line in $(get_same_dir_files); do
+        # skip bash_pgr_aliases.sh and bash_pgr_colors.sh
+        if [[ "$line" =~ ^(.*bash_pgr_aliases\.sh|.*bash_pgr_colors\.sh)$ ]]; then
+            continue
+        fi
         filename=$(echo $line | sed 's|^.*/||')
-        echo file: $filename
+        echo $filename
         pgr_ifc_format_help $line
+        echo
     done
     echo
 }
@@ -45,14 +57,3 @@ if [ ${PGR_SHELL_LOADED:-0} -ne 1 ]; then
     export PGR_SHELL_LOADED=1
 fi
 
-# function immhelp() {
-#     # immhelp - print this help
-#     echo "Immensus shell commands"
-#     echo "Read from ${BASH_SOURCE[0]}"
-#     echo -e "\nAvailable shell commands for immensus:"
-#     echo "-----------------------"
-#     get_help_lines
-#     pgr_ifc_format_help "${BASH_SOURCE[0]}"
-
-
-# }

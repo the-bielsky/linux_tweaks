@@ -32,5 +32,9 @@ for user in `ls -1 /home/` root; do
     else
         echo "${BASHRC} not found" >&2
     fi
+    source sys_files/usr/local/lib/pgr_shell/pgr_shell.sh
+    pgrshell_version=$(pgr_shell_version)
+    # Replace line starting with VERSION= in /usr/local/lib/pgr_shell/pgr_shell.sh with the pgrshell_version
+    sed -i "s/^VERSION=.*/VERSION=\"${pgrshell_version}\"/" /usr/local/lib/pgr_shell/pgr_shell.sh
 done
 
