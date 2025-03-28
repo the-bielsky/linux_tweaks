@@ -48,9 +48,8 @@ function pgr_git_is_repo() {
 }
 
 function pgr_git_repo_version() {
-    # pgr_git_version [directory] - print the version of git repo inside directory; default is current dir;
+    # pgr_git_repo_version [directory] - print the version of git repo inside directory; default is current dir;
     local cur_dir="${1:-$(pwd)}"
-    local cur_dir=$pwd
     is_clean=$(_pgr_errormsg='-dirty' pgr_git_is_clean)
     local ver=$(git -C "${cur_dir}" describe --tags --abbrev=4 2>/dev/null)
     echo "${ver}${is_clean}"
