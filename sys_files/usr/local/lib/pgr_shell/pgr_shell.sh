@@ -7,7 +7,7 @@ if [ "$0" = "$BASH_SOURCE" ]; then
     exit 1
 fi
 THIS_FILENAME="${BASH_SOURCE[0]}"
-VERSION=""
+VERSION="" # setting automatically by setup.sh
 
 pgr_shell_version() {
     # pgr_shell_version - print the version of the pgr shell
@@ -40,7 +40,9 @@ pgr_help() {
         pgr_ifc_format_help $line
         echo
     done
-    echo
+    echo 
+    echo Shell variables:
+    export | grep PGR | sed 's|^.*PGR_|    PGR_|g'
 }
 
 for filename in $(get_same_dir_files); do
@@ -52,8 +54,8 @@ for filename in $(get_same_dir_files); do
 done
 
 if [ ${PGR_SHELL_LOADED:-0} -ne 1 ]; then
-    echo $PGR_SHELL_LOADED
-    echo -e "PGr shell commands loaded; Use \033[32mpgr_help\033[0m for more info"
+    echo -e "PGr shell version: ${VERSION} loaded; Use \033[32mpgr_help\033[0m for more info"
     export PGR_SHELL_LOADED=1
 fi
+
 
