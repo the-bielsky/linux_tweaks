@@ -25,6 +25,7 @@ function pgr_ifc_get_help_lines() {
 }
 
 function pgr_ifc_format_help() {
+    # pgr_format_help <input_file> - print formatted help lines
     input_file="$1"
     longest_command_str=0
     while read -r line; do
@@ -35,9 +36,9 @@ function pgr_ifc_format_help() {
         fi
     done < <(pgr_ifc_get_help_lines "${input_file}" | sed -E "s/^\W*# ?//")
 
-
+    longest_command_str=${longest_command_str:-32}
     if [ $longest_command_str -gt 32 ]; then
-        longest_command_str
+        longest_command_str=32
     fi
     
     while read -r line; do

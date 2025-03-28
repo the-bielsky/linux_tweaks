@@ -69,7 +69,6 @@ trap 'echo Error!; ERRCNT=$((ERRCNT+1)); exit 1' ERR
 # Healthcheck; statement in the loop doesnt generate error if gh repo list has error
 res=$(gh repo list $PGR_REPO_OWNER)
 # echo $res
-# gh repo list solution-sca --json name,diskUsage --jq '.[] | "\(.name)"' | wc -l
 for owner in ${PGR_REPO_OWNER[@]}; do
     echo -------------------------------------------------------------------------------
     echo -e "Cloning repositories of $owner to $PGR_GIT_BACKUP_DIR"

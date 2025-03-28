@@ -18,7 +18,6 @@ if [ -z "${P1_HOSTS}" ]; then
         8.8.8.8
         www.wp.pl
         www.google.com
-        www.solutionsca.pl
     )
 fi
 

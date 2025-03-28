@@ -4,6 +4,7 @@
 DOCKER_REQUIRED_DISK_SPACE=${DOCKER_REQUIRED_DISK_SPACE:-20000000}
 
 function dkr_setup_gcloud_repo(){
+    # dkr_setup_gcloud_repo - setup Google Cloud SDK repository
         apt -y install apt-transport-https ca-certificates curl gnupg lsb-release git
     if [ -f /etc/apt/sources.list.d/google-cloud-sdk.list ]; then
         rm -f /etc/apt/sources.list.d/google-cloud-sdk.list
@@ -26,10 +27,12 @@ function dkr_setup_gcloud_repo(){
 }
 
 function dkr_get_docker_dir() {
+    # dkr_get_docker_dir - get docker data directory
     docker info | grep "Docker Root Dir" | awk '{print $NF;}'
 }
 
 function dkr_check_docker_disk_space() {
+    # dkr_check_docker_disk_space [required_space] [docker directory] default: DOCKER_REQUIRED_DISK_SPACE
     # $1 - required space in KB (optional) defauilt: DOCKER_REQUIRED_DISK_SPACE
     # $2 - [docker directory] (optional) default: $(dkr_get_docker_dir)
     local required_space=${1:-$DOCKER_REQUIRED_DISK_SPACE}
@@ -42,6 +45,7 @@ function dkr_check_docker_disk_space() {
 }
 
 function dkr_check_tag_exists() {
+    # dkr_check_tag_exists <base_tag> <tag> - check if tag exists in Google Cloud repository
     # $1 - base tag (path to image without tag)
     # $2 - tag (number of tag to check)
     local base_tag=$1
@@ -54,6 +58,7 @@ function dkr_check_tag_exists() {
 }
 
 function dkr_install_docker_ce() {
+    # dkr_install_docker_ce - install Docker CE in ubuntu; use dkr_setup_gcloud_repo first
     # must be root
     if [ $EUID -ne 0 ]; then
         shout "This script must be run as root."
@@ -75,6 +80,7 @@ function dkr_install_docker_ce() {
 }
 
 function dkr_move_docker_directory(){
+    # dkr_move_docker_directory <destination_directory> - move Docker directory to another location
     # $1 - destination directory
     service docker stop
     old_docker_dir=$(dkr_get_docker_dir)
@@ -99,7 +105,7 @@ function dkr_move_docker_directory(){
     trap - ERR
 }
 
-function _autocheck_space(){
+_autocheck_space(){
     res=$(dkr_check_docker_disk_space)
     if [ $? -ne 0 ]; then
         docker_dir=$(dkr_get_docker_dir)
@@ -112,6 +118,7 @@ function _autocheck_space(){
 }
 
 function dkr_setup_all (){
+    # dkr_setup_all - setup Google Cloud SDK repository, install Docker CE and Google Cloud SDK
     # must be root
     if [ $EUID -ne 0 ]; then
         shout "This script must be run as root."
