@@ -6,4 +6,5 @@ check_git_changes(){
         shout "WARNING: There are uncommited changes in the repository"
         return 1
     fi
+    # DEPRECATED; use functions from pgr_git.sh instead
 }

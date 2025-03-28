@@ -45,26 +45,6 @@ if [ ${PGR_SHELL_LOADED:-0} -ne 1 ]; then
     export PGR_SHELL_LOADED=1
 fi
 
-function pgr_git_is_clean() {
-    # pgr_git_is_clean [directory] - check if the git repo inside directory is clean; default is current dir
-    local cur_dir="${1:-$(pwd)}"
-    cur_dir=$pwd
-    git -C "${cur_dir}" status  --porcelain | grep -q '^[^?]' && return 1
-    return 0
-}
-
-function pgr_git_version() {
-    # pgr_git_version [directory] - print the version of git repo inside directory; default is current dir
-    # check if is clean
-    local cur_dir="${1:-$(pwd)}"
-    cur_dir=$pwd
-    git -C "${cur_dir}" status  --porcelain | grep -q '^[^?]' && false
-    if [ -d .git ]; then
-        res=$(git status -C "${cur_dir}" --porcelain | grep -q '^[^?]' && echo "Working directory is not clean")
-    fi
-    git describe --long --tags --abbrev=4 2>/dev/null || echo "unknown-version"
-}
-
 # function immhelp() {
 #     # immhelp - print this help
 #     echo "Immensus shell commands"
