@@ -7,11 +7,12 @@ if [ "$0" = "$BASH_SOURCE" ]; then
     exit 1
 fi
 THIS_FILENAME="${BASH_SOURCE[0]}"
-VERSION="" # setting automatically by setup.sh
+export PGR_SHELL_VERSION="" # setting automatically by setup.sh
 
 pgr_shell_version() {
+    shell_installer_dir=$(dirname "${THIS_FILENAME}")
     # pgr_shell_version - print the version of the pgr shell
-    pgr_git_repo_version "${THIS_FILENAME}"
+    pgr_git_repo_version 
 }
 
 get_same_dir_files(){
@@ -25,7 +26,7 @@ get_same_dir_files(){
 pgr_help() {
     echo
     echo "PGr shell commands"
-    echo "Version: $VERSION"
+    echo "Version: $PGR_SHELL_VERSION"
     echo
     # echo "pgr_help:    Show this help"
     # echo "pgr_git_backup:    Backup all repositories of the owner to the backup_dir"
@@ -54,7 +55,7 @@ for filename in $(get_same_dir_files); do
 done
 
 if [ ${PGR_SHELL_LOADED:-0} -ne 1 ]; then
-    echo -e "PGr shell version: ${VERSION} loaded; Use \033[32mpgr_help\033[0m for more info"
+    echo -e "PGr shell version: ${PGR_SHELL_VERSION} loaded; Use \033[32mpgr_help\033[0m for more info"
     export PGR_SHELL_LOADED=1
 fi
 

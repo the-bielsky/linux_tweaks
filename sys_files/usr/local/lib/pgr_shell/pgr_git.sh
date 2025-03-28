@@ -2,12 +2,15 @@
 
 function pgr_git_is_clean() {
     # pgr_git_is_clean [directory] - check repo is clean; if not: echo '-dirty' and return 1; massage may by changed by variable _pgr_errormsg
-    local cur_dir="${1:-$(pwd)}"
+    local cur_dir="${1:-$PWD)}"
     local message=${_pgr_errormsg:-dirty}
-
+    # # DEBUG
+    # cur_dir=${PWD}
+    # cur_dir=/home
+        
     # Check if the directory is a git repository
     if ! git -C "${cur_dir}" rev-parse --is-inside-work-tree &>/dev/null; then
-        echo -e "Git in '${cur_dir}' is not a git repo or can't read it" >&2
+        # echo -e "Git in '${cur_dir}' is not a git repo or can't read it" >&2
         echo "-no-repo-"
         return 1
     fi
@@ -50,7 +53,7 @@ function pgr_git_is_repo() {
 function pgr_git_repo_version() {
     # pgr_git_repo_version [directory] - print the version of git repo inside directory; default is current dir;
     local cur_dir="${1:-$(pwd)}"
-    is_clean=$(_pgr_errormsg='-dirty' pgr_git_is_clean)
+    is_clean=$(_pgr_errormsg='-dirty' pgr_git_is_clean "${cur_dir}")
     local ver=$(git -C "${cur_dir}" describe --tags --abbrev=4 2>/dev/null)
     echo "${ver}${is_clean}"
 }
