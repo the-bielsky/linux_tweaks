@@ -27,7 +27,8 @@ function _git_pullpush_(){
     if $(git_status_numeric); then
         sleep 1; 
         trap "echo operation failed; return 1" ERR
-        git $operation origin --tags ${BRANCH}
+        git $operation origin ${BRANCH}
+        git $operation --tags
         return 0
     else
         echo Branch $BRANCH is not commited\; operation aborted
