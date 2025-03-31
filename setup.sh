@@ -39,5 +39,5 @@ cur_dir=$(dirname "$0")
 echo $cur_dir
 pgrshell_version=$(pgr_shell_version "$cur_dir")
 echo   $pgrshell_version
-sed -i "s/^PGR_SHELL_VERSION=.*/PGR_SHELL_VERSION=\"${pgrshell_version}\"/" /usr/local/lib/pgr_shell/pgr_shell.sh
+sed -i "s/^.*PGR_SHELL_VERSION=.*/PGR_SHELL_VERSION=\"${pgrshell_version}\"/" /usr/local/lib/pgr_shell/pgr_shell.sh
 
