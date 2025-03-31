@@ -23,16 +23,13 @@ alias shcon='source /usr/local/bin/sshconnect.sh'
 function _git_pullpush_(){
     operation=$1
     BRANCH=$(git branch --show-current); 
-    echo wtf
     if $(git_status_numeric); then
         echo GIT: $operation origin $BRANCH; 
-        echo ??
         sleep 1; 
         trap "echo operation failed; return 1" ERR
         git $operation origin ${BRANCH}
-        echo $operation
         git $operation --tags
-        echo $?
+        echo "pulling finished"
         return 0
     else
         echo Branch $BRANCH is not commited\; operation aborted
