@@ -29,7 +29,7 @@ function _git_pullpush_(){
         trap "echo operation failed; return 1" ERR
         git $operation origin ${BRANCH}
         git $operation --tags
-        echo "pulling finished"
+        echo ${operation} "finished"
         return 0
     else
         echo Branch $BRANCH is not commited\; operation aborted
