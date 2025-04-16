@@ -54,6 +54,16 @@ function pgr_backup_file {
         return 1
     fi
     input_file="$1"
+    # check if $1 is not empty
+    if [ -z "$input_file" ]; then
+        echo "No input file given" >&2
+        return 1
+    fi
+    # check if $1 is a file
+    if [ ! -f "$input_file" ]; then
+        echo "Input file $input_file is not a file or doesn't exist" >&2
+        return 1
+    fi
     input_file=$(readlink -f "$input_file")
     base_filename="$(basename $input_file)"
     input_chksum=$(pgr_chksum_file "$input_file")
