@@ -1,3 +1,4 @@
+# Shell tweaks
 set -a
 fg_off=$(tput sgr0)
 format_off=$(tput sgr0)
@@ -82,28 +83,6 @@ function git_status_numeric {
   fi
 }
 
-# function git_describe {
-#   git describe --tags --always
-# }
-
-# # Function to check if the current directory is a Git repository
-# function is_git_repo {
-#   if $(git rev-parse --is-inside-work-tree &>/dev/null); then
-#     echo -e "─${fg_red}($(git_status)$(git_branch)${fg_red}/$(git_status)$(git_describe)${fg_red})"
-#   else
-#     return
-#   fi
-# }
-
-
-# upper-left corner"
-# ┌─[root@przemekg]─[linux_tweaks]
-# └── # 
-
-# shellcheck disable=2154
-# Bez zamknięcia nazw kolorów w \[${nazwa}\] PS1 działa, ale rozwala się przewijanie historii strzałką (dziwne rzeczy, gdy po dłuższym tekscie jest krótszy)
-# \$(git_status) runs every usage; $(git_status) runs once 
-# --- PGR_EXTENSIONS_& ---
 
 PS1="\[${fg_red}\]┌\$([[ \$? != 0 ]] && echo \"─[\342\234\227\[\033[0;37m\]${fg_red}]\")\
 \$( [ -n \"\${VIRTUAL_ENV_PROMPT}\" ]  &&  echo \"─[\[${fg_amber}\]poetry: \${VIRTUAL_ENV_PROMPT}\[${fg_red}\]]\")\

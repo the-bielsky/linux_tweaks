@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # check if the script is running in ubuntu
 if [ -f /etc/os-release ]; then
     . /etc/os-release

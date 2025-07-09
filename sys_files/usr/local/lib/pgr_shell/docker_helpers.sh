@@ -5,7 +5,7 @@ DOCKER_REQUIRED_DISK_SPACE=${DOCKER_REQUIRED_DISK_SPACE:-20000000}
 
 function dkr_setup_gcloud_repo(){
     # dkr_setup_gcloud_repo - setup Google Cloud SDK repository
-        apt -y install apt-transport-https ca-certificates curl gnupg lsb-release git
+    apt -y install apt-transport-https ca-certificates curl gnupg lsb-release git
     if [ -f /etc/apt/sources.list.d/google-cloud-sdk.list ]; then
         rm -f /etc/apt/sources.list.d/google-cloud-sdk.list
     fi
