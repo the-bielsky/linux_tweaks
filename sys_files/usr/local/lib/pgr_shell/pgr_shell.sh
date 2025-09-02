@@ -10,8 +10,8 @@ THIS_FILENAME="${BASH_SOURCE[0]}"
 export PGR_SHELL_VERSION="" # setting automatically by setup.sh
 
 pgr_shell_version() {
-    shell_installer_dir=$(dirname "${THIS_FILENAME}")
     # pgr_shell_version - print the version of the pgr shell
+    shell_installer_dir=$(dirname "${THIS_FILENAME}")
     pgr_git_repo_version 
 }
 
