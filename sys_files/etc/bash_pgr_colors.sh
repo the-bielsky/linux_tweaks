@@ -1,5 +1,9 @@
-# Shell tweaks
+#!/bin/bash
+# check if a is set
+
+is_allexport=$(echo "$-" | grep -q 'a' && echo "1" || echo "0")
 set -a
+
 fg_off=$(tput sgr0)
 format_off=$(tput sgr0)
 fg_default="\e[39m"
@@ -21,7 +25,6 @@ bg_blue=$(tput setab 4)
 bg_red=$(tput setab 1)
 bg_burowy=$(tput setab 236)
 fg_rev=$(tput rev)
-set +a
 
 username_color=${fg_white}
 if [ ${UID} -eq 0 ]; then
@@ -33,21 +36,20 @@ fi
 function ps1_user_and_hostname(){
     hostname_color=${fg_green}
     username_color=${fg_white}
-    if [[ ${EUID} == 0 ]]; then 
+    if [[ ${EUID} == 0 ]]; then
         # echo -e "\[${fg_red}\]root@"
         hostname_color=${fg_red}
         username_color=${fg_red}
     fi
     if $(command -v vbox-greeter >/dev/null 2>&1); then
         hostname_color=${fg_amber}
-    elif [[ "$(hostname)" =~ ^imm- ]]; then
+        elif [[ "$(hostname)" =~ ^imm- ]]; then
         hostname_color=${fg_orange}
-    elif [[ "$(hostname)" =~ ^immdev- ]]; then
+        elif [[ "$(hostname)" =~ ^immdev- ]]; then
         hostname_color=${fg_gray}
-    elif [[ -n "${SSH_CLIENT}" ]]; then
+        elif [[ -n "${SSH_CLIENT}" ]]; then
         hostname_color=${fg_cyan}
     fi
-
     echo -e "${username_color}\\u${fg_amber}@${hostname_color}\\h"
 }
 
@@ -62,51 +64,72 @@ function is_vpn_connection(){
 
 # Function to get the current Git branch name
 function git_branch {
-  res=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-  printf "${res}"
+    res=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+    printf "${res}"
 }
 
 # Function to check if the Git status is clean
 function git_status {
-  if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
-    printf "${fg_red}"  # Red color
-  else
-    printf "${fg_amber}"  # Green color
-  fi
+    if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
+        printf "${fg_red}"  # Red color
+    else
+        printf "${fg_amber}"  # Green color
+    fi
 }
 
 function git_status_numeric {
-  if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
-    return 1
-  else
-    return 0
-  fi
+    if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
+        return 1
+    else
+        return 0
+    fi
 }
 
+PS1_1="\[${fg_red}\]┌\$([[ \$? != 0 ]] && echo \"[\342\234\227\[\033[0;37m\]${fg_red}]\")"
+PS1_1B="\[${fg_red}\]┌\$([[ \$? != 0 ]] \
+&& echo \"[\342\234\227\[\033[0;37m\]${fg_red}]\" \
+|| echo \"[${fg_green}\342\234\223\[\033[0;37m\]${fg_red}]\")"
+PS1_ENDLN="─[${fg_amber}\w\[${fg_red}\]]\n\[${fg_red}\]└"
+PS1_END="─ \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
 
-PS1="\[${fg_red}\]┌\$([[ \$? != 0 ]] && echo \"─[\342\234\227\[\033[0;37m\]${fg_red}]\")\
-\$( [ -n \"\${VIRTUAL_ENV_PROMPT}\" ]  &&  echo \"─[\[${fg_amber}\]poetry: \${VIRTUAL_ENV_PROMPT}\[${fg_red}\]]\")\
-─[$(ps1_user_and_hostname)\[${fg_red}\]]\
-\$( [ -n \"${NETNS}\" ]  &&  echo \"─[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )\
-\$( [ -n \"\${tag}\" ]  &&  echo \"─[\[${fg_amber}\]tag \${tag}\[${fg_red}\]]\"    )\
-\$( [ -n \"\${build}\" ]  &&  echo \"─[\[${fg_amber}\]build \${build}\[${fg_red}\]]\"    )\
-─[${fg_amber}\w\[${fg_red}\]]\n\[${fg_red}\]└\
-\$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"─[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)\[${fg_red}\]]\")\
-\$( [ -n \"\${PPJ1_CLIGRP}\" ]  &&  echo \"─[\[${fg_amber}\]voipgrp \${PPJ1_CLIGRP}\[${fg_red}\]]\"    )\
-\$( [ -n \"\${ipaddr}\" ]  &&  echo \"─[\[${fg_amber}\]ipaddr \${ipaddr}\[${fg_red}\]]\"    )\
-\$( [ -n \"\$(git_branch)\" ]  &&  echo \"─[\[\$(git_status)\]git: \$(git_branch)\[${fg_red}\]]\")\
-\$( [ \"\$(is_vpn_connection)\" -eq 1 ]  &&  echo \"─[\[${fg_red}\]VPN]\"    )\
-─ \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
+PS1_PYTHON="\$( [ -n \"\${VIRTUAL_ENV_PROMPT}\" ]  &&  echo \"─[\[${fg_amber}\]python: \${VIRTUAL_ENV_PROMPT}\[${fg_red}\]]\")"
+PS1_USERANDHOSTNAME="─[$(ps1_user_and_hostname)\[${fg_red}\]]"
+PS1_GIT="\$( [ -n \"\$(git_branch)\" ]  &&  echo \"─[\[\$(git_status)\]git: \$(git_branch)\[${fg_red}\]]\")"
+PS1_NETNS="─[$( [ -n \"${NETNS}\" ]  &&  echo \"─[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )]"
+PS1_BUILD="\$( [ -n \"\${build}\" ]  &&  echo \"─[\[${fg_amber}\]build \${build}\[${fg_red}\]]\"    )"
+PS1_DATESTAMP="\$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"─[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)\[${fg_red}\]]\")"
+PS1_CLIGRP="\$( [ -n \"\${PPJ1_CLIGRP}\" ]  &&  echo \"─[\[${fg_amber}\]voipgrp \${PPJ1_CLIGRP}\[${fg_red}\]]\"    )"
+PS1_IPADDR="\$( [ -n \"\${IPADDR}\" ]  &&  echo \"─[\[${fg_amber}\]ipaddr \${IPADDR}\[${fg_red}\]]\"    )"
+PS1_GIT="\$( [ -n \"\$(git_branch)\" ]  &&  echo \"─[\[\$(git_status)\]git: \$(git_branch)\[${fg_red}\]]\")"
+PS1_VPN="\$( [ \"\$(is_vpn_connection)\" -eq 1 ]  &&  echo \"─[\[${fg_red}\]VPN]\"    )"
+
+PS1="\
+${PS1_1B}\
+${PS1_PYTHON}\
+${PS1_USERANDHOSTNAME}\
+${PS1_ENDLN}\
+${PS1_DATESTAMP}\
+${PS1_VPN}\
+${PS1_NETNS}\
+${PS1_BUILD}\
+${PS1_CLIGRP}\
+${PS1_IPADDR}\
+${PS1_GIT}\
+${PS1_END}"
 
 # Set 'man' colors
 man() {
-env \
-LESS_TERMCAP_mb=$'\e[01;31m' \
-LESS_TERMCAP_md=$'\e[01;31m' \
-LESS_TERMCAP_me=$'\e[0m' \
-LESS_TERMCAP_se=$'\e[0m' \
-LESS_TERMCAP_so=$'\e[01;44;33m' \
-LESS_TERMCAP_ue=$'\e[0m' \
-LESS_TERMCAP_us=$'\e[01;32m' \
-man "$@"
+    env \
+    LESS_TERMCAP_mb=$'\e[01;31m' \
+    LESS_TERMCAP_md=$'\e[01;31m' \
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[01;44;33m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[01;32m' \
+    man "$@"
 }
+
+if [ $is_allexport -eq 0 ]; then
+    set +a
+fi
