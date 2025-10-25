@@ -1,9 +1,10 @@
 #!/bin/bash
 PGR_EXTENSIONS_FILE="resources/pgr_extensions_to_bashrc.sh"
+
 rsync -r sys_files/etc/* /etc/
 rsync -r sys_files/usr/* /usr/
 
-for user in `ls -1 /home/` root; do
+for user in $(ls -1 /home/) root; do
     prefix="/home"
     echo -e "Updating ${prefix}/$user"
     if [[ "$user" == "root" ]]; then
@@ -34,6 +35,7 @@ for user in `ls -1 /home/` root; do
     fi
     # Replace line starting with VERSION= in /usr/local/lib/pgr_shell/pgr_shell.sh with the pgrshell_version
 done
+
 source sys_files/usr/local/lib/pgr_shell/pgr_shell.sh
 cur_dir=$(dirname "$0")
 echo $cur_dir

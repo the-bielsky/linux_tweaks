@@ -77,14 +77,6 @@ function git_status {
     fi
 }
 
-function git_status_numeric {
-    if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
-        return 1
-    else
-        return 0
-    fi
-}
-
 PS1_1="\[${fg_red}\]┌\$([[ \$? != 0 ]] && echo \"[\342\234\227\[\033[0;37m\]${fg_red}]\")"
 PS1_1B="\[${fg_red}\]┌\$([[ \$? != 0 ]] \
 && echo \"[\342\234\227\[\033[0;37m\]${fg_red}]\" \
