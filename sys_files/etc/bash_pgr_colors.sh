@@ -86,13 +86,13 @@ PS1_END="─ \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
 
 PS1_PYTHON="\$( [ -n \"\${VIRTUAL_ENV_PROMPT}\" ]  &&  echo \"─[\[${fg_amber}\]python: \${VIRTUAL_ENV_PROMPT}\[${fg_red}\]]\")"
 PS1_USERANDHOSTNAME="─[$(ps1_user_and_hostname)\[${fg_red}\]]"
-PS1_GIT="\$( [ -n \"\$(git_branch)\" ]  &&  echo \"─[\[\$(git_status)\]git: \$(git_branch)\[${fg_red}\]]\")"
 PS1_NETNS="─[$( [ -n \"${NETNS}\" ]  &&  echo \"─[\[${ns_colour}\]netns \${NETNS}\[${fg_red}\]]\"    )]"
 PS1_BUILD="\$( [ -n \"\${build}\" ]  &&  echo \"─[\[${fg_amber}\]build \${build}\[${fg_red}\]]\"    )"
 PS1_DATESTAMP="\$( [ -n \"\${PGR_DATESTAMP}\" ]  &&  echo \"─[\[${fg_amber}\]\$(date +\%Y-\%m-\%d-\%H:\%M:\%S)\[${fg_red}\]]\")"
 PS1_CLIGRP="\$( [ -n \"\${PPJ1_CLIGRP}\" ]  &&  echo \"─[\[${fg_amber}\]voipgrp \${PPJ1_CLIGRP}\[${fg_red}\]]\"    )"
 PS1_IPADDR="\$( [ -n \"\${IPADDR}\" ]  &&  echo \"─[\[${fg_amber}\]ipaddr \${IPADDR}\[${fg_red}\]]\"    )"
 PS1_GIT="\$( [ -n \"\$(git_branch)\" ]  &&  echo \"─[\[\$(git_status)\]git: \$(git_branch)\[${fg_red}\]]\")"
+# PS1_GIT="\$( [ -n \"\$(git_branch)\" ]  &&  echo \"─[\[\$(git_status)\]git: \$(git_branch)\[${fg_red}\]]\")"
 PS1_VPN="\$( [ \"\$(is_vpn_connection)\" -eq 1 ]  &&  echo \"─[\[${fg_red}\]VPN]\"    )"
 
 PS1="\
@@ -102,12 +102,13 @@ ${PS1_USERANDHOSTNAME}\
 ${PS1_ENDLN}\
 ${PS1_DATESTAMP}\
 ${PS1_VPN}\
-${PS1_NETNS}\
-${PS1_BUILD}\
 ${PS1_CLIGRP}\
 ${PS1_IPADDR}\
 ${PS1_GIT}\
 ${PS1_END}"
+
+# ${PS1_NETNS}\
+# ${PS1_BUILD}\
 
 # Set 'man' colors
 man() {
