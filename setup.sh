@@ -4,6 +4,16 @@ PGR_EXTENSIONS_FILE="resources/pgr_extensions_to_bashrc.sh"
 rsync -r sys_files/etc/* /etc/
 rsync -r sys_files/usr/* /usr/
 
+
+DEPRECATED_FILES=(
+    "/etc/bash_pgr_aliases.sh"
+)
+for file in "${DEPRECATED_FILES[@]}"; do
+    if [ -f "$file" ]; then
+        rm -i "$file"
+    fi
+done
+
 for user in $(ls -1 /home/) root; do
     prefix="/home"
     echo -e "Updating ${prefix}/$user"
@@ -42,4 +52,3 @@ echo $cur_dir
 pgrshell_version=$(pgr_shell_version "$cur_dir")
 echo   $pgrshell_version
 sed -i "s/^.*PGR_SHELL_VERSION=.*/PGR_SHELL_VERSION=\"${pgrshell_version}\"/" /usr/local/lib/pgr_shell/pgr_shell.sh
-

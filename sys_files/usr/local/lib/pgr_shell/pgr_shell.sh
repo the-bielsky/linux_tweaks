@@ -31,17 +31,16 @@ pgr_help() {
     # echo "pgr_help:    Show this help"
     # echo "pgr_git_backup:    Backup all repositories of the owner to the backup_dir"
     # echo "pgr_metabase_api:    Metabase API helpers"
-    for line in $(get_same_dir_files); do
-        # skip bash_pgr_aliases.sh and bash_pgr_colors.sh
-        if [[ "$line" =~ ^(.*bash_pgr_aliases\.sh|.*bash_pgr_colors\.sh)$ ]]; then
-            continue
-        fi
-        filename=$(echo $line | sed 's|^.*/||')
-        echo $filename
-        pgr_ifc_format_help $line
-        echo
-    done
-    echo 
+    # for line in $(get_same_dir_files); do
+    #     # skip bash_pgr_aliases.sh and bash_pgr_colors.sh
+    #     if [[ "$line" =~ ^(.*bash_pgr_aliases\.sh|.*bash_pgr_colors\.sh)$ ]]; then
+    #         continue
+    #     fi
+    #     filename=$(echo $line | sed 's|^.*/||')
+    #     echo $filename
+    #     pgr_ifc_format_help $line
+    #     echo
+    # done
     echo Shell variables:
     export | grep PGR | sed 's|^.*PGR_|    PGR_|g'
 }

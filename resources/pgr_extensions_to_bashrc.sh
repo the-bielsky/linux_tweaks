@@ -12,12 +12,6 @@ if [ "$color_prompt" = yes ]; then
     export VIRTUAL_ENV_DISABLE_PROMPT=1
 fi
 unset color_prompt
-for ALIAS_FILE in ~/.bash_pgr_aliases.sh /etc/bash_pgr_aliases.sh; do
-    if [ -f ${ALIAS_FILE} ]; then
-        . ${ALIAS_FILE}
-        break
-    fi
-done
 
 . /usr/local/lib/pgr_shell/pgr_shell.sh
 
